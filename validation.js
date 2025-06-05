@@ -29,6 +29,25 @@ const productValidation = (data) => {
   });
   return schema.validate(data);
 };
+const productPatchValidation = (data) => {
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(50),
+    description: Joi.string().allow(""),
+    price: Joi.number().positive(),
+    stock: Joi.number().integer().min(0),
+    imageUrl: Joi.string().uri().optional(),
+  });
+  return schema.validate(data);
+};
+const addProductValidation = (data) => {
+  const schema = Joi.object({
+    productId: Joi.number().positive().required(),
+    quantity: Joi.number().integer().min(1).required(),
+  });
+  return schema.validate(data);
+};
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.productValidation = productValidation;
+module.exports.addProductValidation = addProductValidation;
+module.exports.productPatchValidation = productPatchValidation;

@@ -43,6 +43,9 @@ const User = sequelize.define(
           user.password = await bcrypt.hash(user.password, 12);
         }
       },
+      afterCreate: async (user, options) => {
+        await user.createCart();
+      },
     },
   }
 );

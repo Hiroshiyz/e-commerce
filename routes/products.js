@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Product = require("../models").Product;
-const { productValidation } = require("../validation");
+const { productValidation, productPatchValidation } = require("../validation");
 router.use((req, res, next) => {
   console.log("正在使用api product");
   next();
@@ -14,9 +14,7 @@ const checkAuthenticate = (req, res, next) => {
 
   next();
 };
-router.get("/test", async (req, res) => {
-  return res.send("測試成功");
-});
+
 //展示所有商品
 router.get("/", async (req, res) => {
   try {
@@ -26,6 +24,7 @@ router.get("/", async (req, res) => {
     return res.status(500).send(error.message);
   }
 });
+
 //新增商品(管理員才可以)
 router.post("/", checkAuthenticate, async (req, res) => {
   let { error } = productValidation(req.body);
@@ -64,7 +63,7 @@ router.get("/:id", async (req, res) => {
 router.delete("/:id", checkAuthenticate, async (req, res) => {
   let { id } = req.params;
   try {
-    const product = await Product.findByPk(id);
+    let product = await Product.findByPk(id);
     if (!product) {
       return res.status(404).json({ message: "找不到商品" });
     } //
@@ -74,6 +73,34 @@ router.delete("/:id", checkAuthenticate, async (req, res) => {
       product,
     });
   } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
+router.patch("/:id", checkAuthenticate, async (req, res) => {
+  let { error } = productPatchValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  let { id } = req.params;
+
+  try {
+    let product = await Product.findByPk(id);
+    if (!product) {
+      return res.status(404).json({ message: "找不到商品" });
+    }
+    //確保只有更新 某些項目剩下的保存 將要更新的 key 放進 updates 過濾完再丟進model.update
+    let updates = {};
+    for (let key in req.body) {
+      if (req.body[key] !== undefined || req.body[key] !== null) {
+        updates[key] = req.body[key];
+      }
+      console.log(updates);
+    }
+    await product.update(updates);
+    return res.send({
+      message: "更新成功",
+      product,
+    });
+  } catch (e) {
     return res.status(500).send(error.message);
   }
 });

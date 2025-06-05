@@ -12,7 +12,13 @@ MONGODB_URI=你的MongoDB連線字串   # MongoDB 資料庫連線字串
 JWT_SECRET=你的JWT密鑰           # 用於生成與驗證 JSON Web Token 的密鑰
 ```
 
----
+## 安裝套件
+
+請執行以下指令安裝 package：
+
+```bash
+npm install
+```
 
 ## 目前功能
 
@@ -20,11 +26,12 @@ JWT_SECRET=你的JWT密鑰           # 用於生成與驗證 JSON Web Token 的�
 
 - **用戶註冊與登入（含 JWT 驗證）**
 
-### 尚未更新
-
 - **購物車管理（加入、移除商品）**
 
 - **訂單建立與查詢**
+
+### 尚未更新
+
 - **支付整合（第三方支付串接）**
 
 - **商品評論與評分系統**
@@ -33,15 +40,13 @@ JWT_SECRET=你的JWT密鑰           # 用於生成與驗證 JSON Web Token 的�
 
 - **更完整的錯誤處理與驗證機制**
 
----
-
 ## 主要的 package
 
-- express：後端框架
+- express, node.js：後端框架
 
-- mongoose：MongoDB ODM
+- sequelize, postgreSQL :資料庫架構
 
-- jsonwebtoken：JWT 驗證
+- jsonwebtoken：JWT 驗證 (採用 RS256)
 
 - bcrypt：密碼雜湊加密
 

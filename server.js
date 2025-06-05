@@ -2,8 +2,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 const express = require("express");
 const app = express();
-const authRoute = require("./routes").auth;
-const productRoute = require("./routes").product;
+const { authRoute, productRoute, cartRoute, orderRoute } = require("./routes");
+
 const sequelize = require("./database");
 const passport = require("passport");
 require("./config/passport")(passport);
@@ -17,13 +17,26 @@ sequelize
 //middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use((err, req, res, next) => {
+  console.log(err);
+  next();
+});
 //router
 app.use("/api/auth", authRoute);
+app.use(
+  "/api/cart",
+  passport.authenticate("jwt", { session: false }),
+  cartRoute
+);
 app.use(
   "/api/product",
   passport.authenticate("jwt", { session: false }),
   productRoute
+);
+app.use(
+  "/api/order",
+  passport.authenticate("jwt", { session: false }),
+  orderRoute
 );
 //connect to port server
 app.listen(process.env.PORT, () => {
