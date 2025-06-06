@@ -7,9 +7,10 @@
 請在專案根目錄建立 `.env` 檔案，並設定以下環境變數：
 
 ```env
-PORT=3000                      # 伺服器監聽的埠號
-MONGODB_URI=你的MongoDB連線字串   # MongoDB 資料庫連線字串
-JWT_SECRET=你的JWT密鑰           # 用於生成與驗證 JSON Web Token 的密鑰
+PORT = 8080
+JWT_SECRET = 
+PRIVATE_KEY_PATH =
+PUBLIC_KEY_PATH = 
 ```
 
 ## 安裝套件
